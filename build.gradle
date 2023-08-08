@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
 repositories {
@@ -10,7 +11,7 @@ dependencies {
     testImplementation 'junit:junit:4.11'
 }
 
-group = 'ch.ethz.ganymed'
+group = 'com.github.rbaul.ganymed'
 version = '263'
 description = 'ganymed-ssh2'
 sourceCompatibility = '1.8'
@@ -37,5 +38,24 @@ jar {
             'Bundle-Version': '1.0.263',
             'Bundle-Name': 'Ganymed SSH2'
         )
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+			from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = project.findProperty("ossrh.user") ?: System.getenv("MAVEN_USERNAME")
+                password = project.findProperty("ossrh.pass") ?: System.getenv("MAVEN_PASSWORD")
+            }
+        }
     }
 }
